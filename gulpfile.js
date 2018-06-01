@@ -11,6 +11,13 @@ const gulp = require('gulp'),
   autoprefixer = require('autoprefixer'),
   mqpacker = require('css-mqpacker'),
   cssnano = require('cssnano'),
+  newer = require('gulp-newer'),
+  imagemin = require('gulp-imagemin'),
+  deporder = require('gulp-deporder'),
+  concat = require('gulp-concat'),
+  stripdebug = require('gulp-strip-debug'),
+  uglify = require('gulp-uglify'),
+  pump = require('pump'),
   env = process.env.NODE_ENV || 'development',
   folder = {
     src: 'src/',
@@ -18,10 +25,13 @@ const gulp = require('gulp'),
   };
 
 // html
-gulp.task('html', function() {
+gulp.task('html', ['images'], () => {
   let out = folder.build;
 
-  return gulp.src(folder.src + '**/*.html').pipe(gulp.dest(out));
+  return gulp
+    .src(folder.src + '**/*.html')
+    .pipe(newer(out))
+    .pipe(gulp.dest(out));
 });
 
 // CSS options
@@ -65,7 +75,7 @@ const sassOptions = {
   ];
 
 // CSS Task
-gulp.task('css', () => {
+gulp.task('css', ['images'], () => {
   let out = folder.build + 'css';
   return gulp
     .src(folder.src + 'scss/styles.scss')
@@ -78,18 +88,70 @@ gulp.task('css', () => {
     .pipe(browserSync.stream());
 });
 
-gulp.task('serve', ['html', 'css'], function() {
+// Images
+gulp.task('images', () => {
+  let out = folder.build + 'images/';
+
+  return gulp
+    .src(folder.src + 'images/**/*')
+    .pipe(newer(out))
+    .pipe(
+      imagemin(
+        [
+          imagemin.gifsicle({ interlaced: true }),
+          imagemin.jpegtran({ progressive: true }),
+          imagemin.optipng({ optimizationLevel: 5 }),
+          imagemin.svgo({
+            plugins: [{ removeViewBox: true }, { cleanupIDs: false }]
+          })
+        ],
+        { verbose: true }
+      )
+    )
+    .pipe(gulp.dest(out));
+});
+
+// Js Development
+gulp.task('js', function(cb) {
+  pump(
+    [
+      gulp.src(folder.src + 'js/**/*'),
+      concat('scripts.js'),
+      gulp.dest(folder.build + 'js')
+    ],
+    cb
+  );
+});
+
+gulp.task('js:compress', function(cb) {
+  pump(
+    [
+      gulp.src(folder.src + 'js/**/*'),
+      uglify(),
+      concat('scripts.js'),
+      stripdebug(),
+      gulp.dest(folder.build + 'js')
+    ],
+    cb
+  );
+});
+
+// Watch
+gulp.task('serve', ['html', 'css', 'images', 'js'], () => {
   browserSync.init({
-    server: folder.build
+    server: folder.build,
+    ui: false
   });
 
   gulp.watch(folder.src + 'scss/**/*', ['css']);
+  gulp.watch(folder.src + 'images/**/*', ['images']);
   gulp
     .watch(folder.src + '**/*.html', ['html'])
     .on('change', browserSync.reload);
+  gulp.watch(folder.src + 'js/**/*', ['js']).on('change', browserSync.reload);
 });
 
 // Tasks
-gulp.task('run', ['html', 'css']);
+gulp.task('run', ['html', 'css', 'images']);
 
 gulp.task('default', ['run', 'serve']);
