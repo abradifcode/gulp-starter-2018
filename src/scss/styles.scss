@@ -1,18 +1,36 @@
+/* Settings */
+@import 'settings.colors';
+@import 'node_modules/sass-mq/mq';
+@import 'settings.mixins';
+@import 'settings.global';
+
+/* Generic */
 @import 'generic.box-sizing';
-.screen-reader {
-  clip: rect(1px, 1px, 1px, 1px);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
+@import-normalize;
+@import 'generic.reset';
+
+/* Elements */
+@import 'elements.page';
+@import 'elements.images';
+
+
+/* Media Queries / Breakpoints */
+
+.foo {
+  @include mq($from: mobile, $until: tablet) {
+    background: red;
+  }
+  @include mq($from: tablet) {
+    background: green;
+  }
 }
 
-body {
-  background-color: #eee;
+/* pixel to rem units */
+
+h1 {
+  font-size: 36px;
 }
 
-.black {
-  background-color: #233;
-  color: #fff;
+h2 {
+  font-size: 32px;
 }

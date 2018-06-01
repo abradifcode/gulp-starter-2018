@@ -4,6 +4,7 @@ const gulp = require('gulp'),
   babel = require('gulp-babel'),
   sass = require('gulp-sass'),
   postcss = require('gulp-postcss'),
+  normalize = require('postcss-normalize'),
   reporter = require('postcss-reporter'),
   scss = require('postcss-scss'),
   browserSync = require('browser-sync').create(),
@@ -49,6 +50,7 @@ const sassOptions = {
   },
   processors = [
     autoprefixer({ browsers: ['last 2 versions', '> 2%'] }),
+    normalize({ browserslist: ['last 3 versions'] }),
     pxtorem({
       replace: true,
       propList: [
