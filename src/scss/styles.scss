@@ -1,13 +1,4 @@
-html {
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
+@import 'generic.box-sizing';
 .screen-reader {
   clip: rect(1px, 1px, 1px, 1px);
   height: 1px;

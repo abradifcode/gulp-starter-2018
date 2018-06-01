@@ -8,10 +8,14 @@
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^8.5.2",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "browser-sync": "^2.24.4",
     "css-mqpacker": "^6.0.2",
     "cssnano": "^3.10.0",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-deporder": "^1.1.0",
     "gulp-imagemin": "^4.1.0",
@@ -25,6 +29,10 @@
     "postcss-reporter": "^5.0.0",
     "postcss-scss": "^1.0.5",
     "pump": "^3.0.0",
-    "sass-mq": "^5.0.0"
-  }
+    "sass-mq": "^5.0.0",
+    "stylelint": "^9.2.1",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-scss": "^3.1.0"
+  },
+  "dependencies": {}
 }

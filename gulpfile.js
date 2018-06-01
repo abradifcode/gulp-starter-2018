@@ -1,6 +1,7 @@
 'use strict';
 
 const gulp = require('gulp'),
+  babel = require('gulp-babel'),
   sass = require('gulp-sass'),
   postcss = require('gulp-postcss'),
   reporter = require('postcss-reporter'),
@@ -18,11 +19,17 @@ const gulp = require('gulp'),
   stripdebug = require('gulp-strip-debug'),
   uglify = require('gulp-uglify'),
   pump = require('pump'),
+  del = require('del'),
   env = process.env.NODE_ENV || 'development',
   folder = {
     src: 'src/',
     build: 'dist/'
   };
+
+// delete build folder
+gulp.task('clean', function() {
+  return del.sync(folder.build);
+});
 
 // html
 gulp.task('html', ['images'], () => {
@@ -116,6 +123,7 @@ gulp.task('js', function(cb) {
   pump(
     [
       gulp.src(folder.src + 'js/**/*'),
+      babel({ presets: ['env'] }),
       concat('scripts.js'),
       gulp.dest(folder.build + 'js')
     ],
@@ -127,6 +135,7 @@ gulp.task('js:compress', function(cb) {
   pump(
     [
       gulp.src(folder.src + 'js/**/*'),
+      babel({ presets: ['env'] }),
       uglify(),
       concat('scripts.js'),
       stripdebug(),
@@ -152,6 +161,6 @@ gulp.task('serve', ['html', 'css', 'images', 'js'], () => {
 });
 
 // Tasks
-gulp.task('run', ['html', 'css', 'images']);
+gulp.task('run', ['html', 'css', 'images', 'js']);
 
-gulp.task('default', ['run', 'serve']);
+gulp.task('default', ['clean', 'run', 'serve']);
