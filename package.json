@@ -1,0 +1,23 @@
+{
+  "name": "gulp-starter-2018",
+  "version": "1.0.0",
+  "description": "gulp starter workflow for front-end development",
+  "main": "index.js",
+  "repository": "git@github.com:uxmoon/gulp-starter-2018.git",
+  "author": "Martin Luna <uxmoon@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^8.5.2",
+    "browser-sync": "^2.24.4",
+    "css-mqpacker": "^6.0.2",
+    "cssnano": "^3.10.0",
+    "gulp": "^3.9.1",
+    "gulp-postcss": "^7.0.1",
+    "gulp-sass": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "postcss-pxtorem": "^4.0.1",
+    "postcss-reporter": "^5.0.0",
+    "postcss-scss": "^1.0.5",
+    "sass-mq": "^5.0.0"
+  }
+}
